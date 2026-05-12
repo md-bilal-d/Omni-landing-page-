@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Omni IDE — AI-Powered Code Editor | Free for Windows</title>
+<meta name="description" content="Omni IDE v3.0.0 — the first local-native AI IDE with a self-healing agentic loop. Free, open-source, zero telemetry, built for autonomous software development.">
+<meta name="keywords" content="AI IDE, Omni IDE, Autonomous Software, Bengaluru Tech, MSME, Code Editor, AI Agent, Open Source">
+<meta name="author" content="Omni IDE Team">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nihu.in/">
+<meta property="og:title" content="Omni IDE — Engineering the Future of Autonomous Software">
+<meta property="og:description" content="Build the future with the first local-native AI IDE. Zero telemetry, zero cloud lock-in, privacy-first autonomous coding.">
+<meta property="og:image" content="omni_ide_og_image_1778610337461.png">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://nihu.in/">
+<meta property="twitter:title" content="Omni IDE — AI-Powered Code Editor">
+<meta property="twitter:description" content="Engineering the Future of Autonomous Software Development. Local, private, and free AI infrastructure.">
+<meta property="twitter:image" content="omni_ide_social_preview.png">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAC8klEQVRYR8VXTWjUQBBe9r9JdrO76W6S7mZ3u9ldYre7u0m6m93tZne7m93dbne72d1uYnd3u9vd7mZ3u5vdf9/MvPlmPkh2s6v94IFhpvPmzczXzLz5pGia5vG0SNH0M0XTP+XvS6AonmZpLALXInAtAtcicC0C1yJwLQIrAnC5Uf4YAV8m7XU+T9rjA8Z+57OkPR8wZpY/O76Xz3XyDAnYAn7mZ6uAifD9GfAnAtYjYI4fAs9p7i6C566X876XfD9E/9kI3D9K+NfL+H0W70fg5wDizvAn9/r7/vshf77f3/f97wF6t4V9W79f428Aeeu9v3NnU6A3e+vP3A74Nf3u094T+vE7f08AeeL9nvAn97q996vCvhNf93vAnvU7t972I0Df0e9E8CPX7+90fO976H2/Fp8V9I5v7v2FvgPo2XyU8VvCv6u/88t779P4Vf9O9Uu/B9Cv7vczfP39K8Cv9e9Un+m9T+NXI+jVfvfOn03v/U7Y99738f6u7+V9H/K9/u97/r/I972/uO97+T6N3418T+OnhH/P99736P0Fve8UfXrvfTr/W77f6N/7P/9f5PvO30T/+f8iX+f7YF/3e6L/K/fOpgFmF6BvA8xu6MfmHqBvA8z20I8O7p0P0LcBZnvon9mY/gXo2wCzPbRv6Z/ZnP4F6NsAsz30e+qH6V+Avg0w20M/Rz9LP0w/BvRtgNke+hX6Zfph9H0H9N7X79X43fXvVP/E9z6Nnzrve/RtgNke+m76Xvpe9A7PZ/8v9G2A2R76Yfps+myA/m0AmX+mNf8M/Z6mNf9G07D/+mGzI6197X3Y/EhrX3sfNj/S2tfef9T8SGv/L+O/+mGzh82PtPa192HzI6197X3Y/EhrX3sfNj/S2tfef9T8SGv/L+O/+mGzh82PtPa192HzI6197X3Y/EhrX3sfNj/S2tfef9T8SGv/L+O/+mGzh82PtPa192HzI6197X3Y/EhrX3sfNj/S2tfef9T8SGv/L+O/+mGzh82PtPa192HzI6197X3Y/EhrX3sfNj/S2tfef9T8SGv/L+O/9/0L7OqH97z/AfgH6t60Z/8HAAAAAElFTkSuQmCC">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+/* CUSTOM SCROLLBAR */
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#f1f1f1}
+::-webkit-scrollbar-thumb{background:#1A56DB;border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:#1544b5}
+
+body{font-family:'DM Sans',sans-serif;color:#111827;background:#fff;cursor:none;overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Syne',sans-serif}
+a{text-decoration:none;color:inherit}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+#scroll-progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#1A56DB,#00B4D8);z-index:200;transition:none}
+#cursor{position:fixed;width:12px;height:12px;background:#1A56DB;border-radius:50%;pointer-events:none;z-index:9999;mix-blend-mode:multiply;transition:width .2s,height .2s}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid #1A56DB;border-radius:50%;pointer-events:none;z-index:9998;transition:width .2s,height .2s}
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.5}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#1A56DB;font-weight:600;margin-bottom:12px}
+.section-title{font-family:'Syne',sans-serif;font-size:46px;font-weight:800;color:#111827;margin-bottom:16px}
+.section-sub{font-size:16px;color:#6B7280;line-height:1.7;max-width:600px;margin-bottom:48px}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;width:100%;z-index:100;padding:20px 0;transition:all .35s}
+.nav.scrolled{background:rgba(255,255,255,.92);backdrop-filter:blur(20px);box-shadow:0 1px 0 #E5E7EB;padding:12px 0}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;padding:0 24px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,#1A56DB,#00B4D8);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:700}
+.nav-logo span.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:#111827;display:flex;align-items:center;gap:12px}
+.logo img{height:32px;width:32px;object-fit:contain;border-radius:4px}
+.nav-links{display:flex;gap:32px}
+.nav-links a{font-size:14px;font-weight:500;color:#6B7280;transition:color .2s}
+.nav-links a:hover{color:#1A56DB}
+.nav-cta{background:#1A56DB;color:#fff;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;border:none;transition:all .2s}
+.nav-cta:hover{background:#1544b5;transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px}
+.hamburger span{width:22px;height:2px;background:#111827;transition:all .3s}
+.mobile-menu{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:#fff;z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:28px}
+.mobile-menu a{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:#111827}
+.nav.menu-open .mobile-menu{display:flex}
+
+/* HERO */
+.hero{min-height:100vh;position:relative;z-index:2;display:flex;align-items:center;padding:100px 0 60px}
+.hero-inner{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;padding:0 24px;width:100%}
+.hero-content{max-width:580px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid #E5E7EB;border-radius:40px;padding:8px 18px;font-size:13px;color:#1A56DB;font-weight:500;margin-bottom:28px}
+.hero-eyebrow .pulse{width:8px;height:8px;background:#22C55E;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.5)}50%{opacity:.8;box-shadow:0 0 0 6px rgba(34,197,94,0)}}
+.hero h1{font-family:'Syne',sans-serif;font-size:72px;font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-bottom:24px}
+.hero h1 .gradient{background:linear-gradient(135deg,#1A56DB,#00B4D8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:17px;color:#6B7280;line-height:1.7;max-width:520px;margin-bottom:32px}
+.hero-ctas{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:28px}
+.btn-primary{background:#1A56DB;color:#fff;padding:13px 26px;border-radius:10px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;border:none;transition:all .25s}
+.btn-primary:hover{background:#1544b5;transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,86,219,.25)}
+.btn-ghost{border:1.5px solid #E5E7EB;color:#111827;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;background:transparent;transition:all .25s}
+.btn-ghost:hover{border-color:#1A56DB;color:#1A56DB;transform:translateY(-2px)}
+.btn-text{color:#1A56DB;font-size:14px;font-weight:600;transition:color .2s}
+.trust-strip{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:40px;padding:10px 24px;font-size:13px;color:#6B7280;display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+
+/* HERO VISUAL */
+.hero-visual{position:relative;width:420px;height:420px;flex-shrink:0}
+.hero-ring{position:absolute;border:1.5px solid rgba(26,86,219,.12);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
+.hero-ring-1{width:200px;height:200px;animation:rotate 25s linear infinite}
+.hero-ring-2{width:320px;height:320px;animation:rotate 35s linear infinite reverse}
+.hero-ring-3{width:420px;height:420px;animation:rotate 50s linear infinite}
+@keyframes rotate{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.hero-dot{position:absolute;width:8px;height:8px;background:#1A56DB;border-radius:50%;animation:hfloat 3s ease-in-out infinite}
+.hero-dot-1{top:20%;left:10%;animation-delay:0s}
+.hero-dot-2{top:60%;right:5%;animation-delay:.8s}
+.hero-dot-3{bottom:15%;left:30%;animation-delay:1.6s}
+@keyframes hfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero-editor{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:210px;background:#0F172A;border-radius:14px;padding:16px;box-shadow:0 0 40px rgba(26,86,219,.2);animation:efloat 4s ease-in-out infinite;z-index:2}
+@keyframes efloat{0%,100%{transform:translate(-50%,-50%) translateY(0)}50%{transform:translate(-50%,-50%) translateY(-8px)}}
+.hero-editor code{font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8;display:block;color:#94A3B8}
+.hero-editor .kw{color:#60A5FA}
+.hero-editor .str{color:#4ADE80}
+.hero-editor .cm{color:#475569}
+.hero-editor .fn{color:#C084FC}
+.version-badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) translateY(-150px);background:#0F172A;border:1px solid rgba(34,197,94,.3);color:#fff;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px;z-index:3;white-space:nowrap}
+.version-badge .g{width:6px;height:6px;background:#22C55E;border-radius:50%}
+
+/* MISSION */
+.mission{background:#F9FAFB;padding:120px 0;position:relative;z-index:2}
+.mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.mission-quote{font-family:'Syne',sans-serif;font-size:30px;font-weight:700;letter-spacing:-.02em;color:#111827;line-height:1.35;border-left:3px solid #1A56DB;padding-left:28px}
+.mission-body p{font-size:16px;color:#6B7280;line-height:1.8;margin-bottom:18px}
+.mission-body p:last-child{color:#111827;font-weight:600}
+
+/* ECOSYSTEM */
+.ecosystem{background:#fff;padding:120px 0;position:relative;z-index:2}
+.eco-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.eco-card{background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:32px;transition:all .35s ease;transform-style:preserve-3d}
+.eco-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(26,86,219,.1);border-color:rgba(26,86,219,.2)}
+.eco-icon{width:44px;height:44px;background:rgba(26,86,219,.08);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.eco-icon svg{width:22px;height:22px;stroke:#1A56DB;fill:none;stroke-width:1.5}
+.eco-status{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px}
+.eco-status.live{background:rgba(34,197,94,.1);color:#16A34A}
+.eco-status.dev{background:rgba(245,158,11,.1);color:#D97706}
+.eco-card h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:4px}
+.eco-card .tagline{font-size:13px;font-weight:600;color:#1A56DB;margin-bottom:10px}
+.eco-card p{font-size:14px;color:#6B7280;line-height:1.7}
+
+/* STATS */
+.stats{background:#111827;padding:100px 0;position:relative;z-index:2;overflow:hidden}
+.stats-overlay{position:absolute;inset:0;pointer-events:none}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);position:relative;z-index:1}
+.stat-tile{padding:40px 32px;border:1px solid rgba(255,255,255,.07);text-align:center;transition:background .3s,border-color .3s}
+.stat-tile:hover{background:rgba(26,86,219,.12);border-color:rgba(26,86,219,.3)}
+.stat-num{font-family:'Syne',sans-serif;font-size:52px;font-weight:800;background:linear-gradient(180deg,#fff,rgba(255,255,255,.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.stat-label{font-size:13px;color:rgba(255,255,255,.45);letter-spacing:.04em;line-height:1.5}
+
+/* TEAM */
+.team{background:#fff;padding:120px 0;position:relative;z-index:2}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.team-card{background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:32px;text-align:center;transition:all .35s}
+.team-card:hover{transform:translateY(-8px);box-shadow:0 24px 64px rgba(26,86,219,.1);border-color:rgba(26,86,219,.2)}
+.team-card.open{border-style:dashed;background:#F9FAFB}
+.team-avatar{width:110px;height:110px;border-radius:50%;background:#F3F4F6;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#1A56DB;object-fit:cover;border:3.5px solid #fff;box-shadow:0 12px 32px rgba(26,86,219,.12);transition:all .3s;overflow:hidden;text-transform:uppercase}
+.avatar-nihan{object-position:center top; transform: scale(1.4);} 
+.avatar-bilal{object-position:center 20%; transform: scale(1.2);}
+.team-card:hover .team-avatar{transform:scale(1.05);box-shadow:0 16px 40px rgba(26,86,219,.2)}
+.team-avatar.dashed{border:2px dashed rgba(26,86,219,.3);background:transparent;font-size:32px;font-weight:300}
+.team-card h3{font-size:18px;font-weight:700;margin-bottom:4px}
+.team-card .title{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#1A56DB;font-weight:600;margin-bottom:14px}
+.team-card .bio{font-size:14px;color:#6B7280;line-height:1.7;margin-bottom:16px}
+.team-card .social{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#1A56DB;font-weight:500}
+
+/* TRUST */
+.trust{background:#F9FAFB;padding:100px 0;position:relative;z-index:2}
+.trust-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.trust-row{display:flex;padding:14px 0;border-bottom:1px solid #E5E7EB;gap:16px}
+.trust-row .tl{font-size:12px;text-transform:uppercase;color:#6B7280;letter-spacing:.06em;min-width:150px;font-weight:500}
+.trust-row .tv{font-size:14px;color:#111827;font-weight:500}
+.trust-row .tv a{color:#1A56DB}
+.msme-badge{background:#fff;border:1px solid #E5E7EB;border-radius:20px;padding:32px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.04)}
+.msme-badge img{width:160px;height:160px;border:3px solid rgba(26,86,219,.2);border-radius:12px;object-fit:cover;margin-bottom:16px;background:#F9FAFB}
+.msme-badge h4{font-size:15px;margin-bottom:6px}
+.msme-badge .code{font-family:'JetBrains Mono',monospace;font-size:12px;color:#6B7280;margin-bottom:12px}
+.verified-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.08);color:#16A34A;padding:6px 16px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.verified-pill .dot{width:6px;height:6px;background:#22C55E;border-radius:50%}
+.msme-badge .hint{font-size:12px;color:#6B7280;margin-top:8px}
+
+/* CAREERS */
+.careers{background:#fff;padding:120px 0;position:relative;z-index:2}
+.careers-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.careers-copy{font-size:16px;color:#6B7280;line-height:1.8}
+.role-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;transition:all .2s}
+.role-card:hover{border-color:rgba(26,86,219,.2);box-shadow:0 4px 16px rgba(0,0,0,.04)}
+.role-title{font-size:15px;font-weight:600;color:#111827;margin-bottom:8px}
+.role-tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase}
+.tag-open{background:rgba(34,197,94,.1);color:#16A34A}
+.tag-upcoming{background:rgba(107,114,128,.1);color:#6B7280}
+.tag-type{background:rgba(26,86,219,.08);color:#1A56DB}
+.tag-loc{background:#F3F4F6;color:#6B7280}
+.btn-apply{background:#1A56DB;color:#fff;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;border:none;transition:all .2s;white-space:nowrap}
+.btn-apply:hover{background:#1544b5}
+.btn-apply.disabled{background:#E5E7EB;color:#9CA3AF;pointer-events:none}
+
+/* CONTACT */
+.contact{background:#F9FAFB;padding:120px 0;position:relative;z-index:2}
+.contact-title{font-family:'Syne',sans-serif;font-size:54px;font-weight:800;letter-spacing:-.03em;margin-bottom:48px;text-align:center}
+.contact-title .blue{color:#1A56DB}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px}
+.contact-link{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:12px;transition:all .25s}
+.contact-link:hover{border-color:rgba(26,86,219,.2);box-shadow:0 4px 16px rgba(0,0,0,.04)}
+.contact-link .ci{width:40px;height:40px;background:rgba(26,86,219,.06);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.contact-link .ci svg{width:18px;height:18px;stroke:#1A56DB;fill:none;stroke-width:1.5}
+.contact-link .cl{font-size:12px;color:#6B7280;margin-bottom:2px}
+.contact-link .cv{font-size:14px;font-weight:500;color:#111827}
+.contact-form{background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:36px;position:relative}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-group{margin-bottom:14px}
+.form-group label{font-size:12px;font-weight:600;color:#6B7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;display:block}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 14px;border:1px solid #E5E7EB;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .2s;outline:none;background:#fff}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#1A56DB}
+.form-group textarea{height:100px;resize:vertical}
+.btn-submit{width:100%;background:#1A56DB;color:#fff;padding:14px;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-submit:hover{background:#1544b5}
+.form-success{display:none;position:absolute;inset:0;background:#fff;border-radius:16px;flex-direction:column;align-items:center;justify-content:center;gap:12px;animation:fadeIn .4s}
+.form-success.show{display:flex}
+.form-success .check{width:56px;height:56px;background:rgba(34,197,94,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* FOOTER */
+.footer{background:#111827;padding:80px 0 40px;position:relative;z-index:2}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.08)}
+.footer-brand .f-logo{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.footer-brand .f-logo img{height:30px;width:30px;object-fit:contain;border-radius:4px}
+.footer-brand .f-logo span{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:#fff}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,.45);line-height:1.6;margin-bottom:10px}
+.footer-brand .reg{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.25)}
+.footer-col h5{font-size:13px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,.45);margin-bottom:10px;transition:color .2s}
+.footer-col a:hover{color:rgba(255,255,255,.9)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;flex-wrap:wrap;gap:12px}
+.footer-bottom span{font-size:13px;color:rgba(255,255,255,.3)}
+.footer-bottom a{font-size:13px;color:rgba(255,255,255,.35);margin-left:16px;transition:color .2s}
+.footer-bottom a:hover{color:rgba(255,255,255,.8)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+.nav-links,.nav-cta{display:none}
+.hamburger{display:flex}
+.hero-inner{flex-direction:column;text-align:center}
+.hero h1{font-size:44px}
+.hero-visual{display:none}
+.hero-ctas{justify-content:center}
+.trust-strip{justify-content:center}
+.mission-grid,.trust-grid,.careers-grid,.contact-grid,.eco-grid{grid-template-columns:1fr}
+.team-grid{grid-template-columns:1fr}
+.stats-grid{grid-template-columns:1fr 1fr}
+.footer-grid{grid-template-columns:1fr 1fr}
+.section-title{font-size:34px}
+.hero-sub{margin:0 auto 32px}
+.contact-title{font-size:38px}
+.form-row{grid-template-columns:1fr}
+.mission,.ecosystem,.team,.trust,.careers,.contact{padding:60px 0}
+.stats{padding:60px 0}
+}
+</style>
+</head>
+<body>
+<style>
+/* PRELOADER */
+#preloader{position:fixed;inset:0;background:#fff;z-index:10000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s}
+#preloader.fade-out{opacity:0;visibility:hidden}
+.loader-logo{display:flex;flex-direction:column;align-items:center;gap:20px}
+.loader-logo img{width:90px;height:90px;position:relative;z-index:2;animation:spin-pulse 0.8s ease-in-out infinite;mix-blend-mode:multiply}
+@keyframes spin-pulse{
+0%{transform:rotate(0) scale(1)}
+50%{transform:rotate(180deg) scale(1.1)}
+100%{transform:rotate(360deg) scale(1)}
+}
+.preloader-burst{animation:burst 0.5s cubic-bezier(0.19, 1, 0.22, 1) forwards}
+@keyframes burst{
+0%{transform:scale(1);opacity:1;filter:blur(0)}
+100%{transform:scale(40);opacity:0;filter:blur(30px)}
+}
+
+/* BACK TO TOP */
+#back-to-top{position:fixed;bottom:30px;right:30px;width:44px;height:44px;background:#1A56DB;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:90;cursor:pointer;opacity:0;visibility:hidden;transition:all .3s;box-shadow:0 8px 24px rgba(26,86,219,.3)}
+#back-to-top.show{opacity:1;visibility:visible}
+#back-to-top:hover{transform:translateY(-5px);background:#1544b5}
+</style>
+
+<div id="preloader"><div class="loader-logo"><img src="logo.jpg" alt="Omni IDE"></div></div>
+<div id="back-to-top" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="bg-canvas"></canvas>
+
+<nav class="nav" id="navbar">
+<div class="nav-inner">
+<a href="#" class="logo">
+<img src="logo.jpg" alt="Omni IDE">
+Omni IDE
+</a>
+<div class="nav-links">
+<a href="#mission">About</a><a href="#ecosystem">Ecosystem</a><a href="#team">Team</a><a href="#careers">Careers</a>
+</div>
+<a href="https://nihu.in" class="nav-cta" target="_blank" rel="noopener noreferrer">Try Omni IDE</a>
+<button class="hamburger" id="hamburger" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+</div>
+<div class="mobile-menu">
+<a href="#mission">About</a><a href="#ecosystem">Ecosystem</a><a href="#team">Team</a><a href="#careers">Careers</a>
+<a href="https://nihu.in" class="btn-primary" target="_blank" rel="noopener noreferrer">Try Omni IDE</a>
+</div>
+</nav>
+
+<section class="hero" id="hero">
+<div class="hero-inner">
+<div class="hero-content">
+<div class="hero-eyebrow"><span class="pulse"></span>AI Research &amp; Engineering Lab · Bengaluru, India</div>
+<h1><span class="h-line">Engineering the Future of</span><br><span class="h-line"><span class="gradient">Autonomous Software</span></span><br><span class="h-line">Development.</span></h1>
+<p class="hero-sub">We build open-source AI infrastructure that gives every developer an autonomous coding agent — local, private, and free.</p>
+<div class="hero-ctas">
+<a href="https://github.com/nihannihu/Omni-IDE/releases" class="btn-primary" target="_blank" rel="noopener noreferrer">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+Download for Windows
+</a>
+<a href="#mission" class="btn-ghost">Read Our Manifesto</a>
+<a href="#careers" class="btn-text">View Open Roles →</a>
+</div>
+<div class="trust-strip">✦ 15,795+ Developer Workflows · Open Source · MSME Registered · Zero Telemetry · Privacy First</div>
+</div>
+<div class="hero-visual">
+<div class="hero-ring hero-ring-1"></div>
+<div class="hero-ring hero-ring-2"></div>
+<div class="hero-ring hero-ring-3"></div>
+<div class="hero-dot hero-dot-1"></div>
+<div class="hero-dot hero-dot-2"></div>
+<div class="hero-dot hero-dot-3"></div>
+<div class="version-badge"><span class="g"></span>v3.0.0 LIVE</div>
+<div class="hero-editor">
+<code><span class="cm">// omni-agent.ts</span>
+<span class="kw">import</span> { Agent } <span class="kw">from</span> <span class="str">'@omni/core'</span>;
+<span class="kw">const</span> agent = <span class="kw">new</span> <span class="fn">Agent</span>({
+  model: <span class="str">'gemini-pro'</span>,
+  sandbox: <span class="kw">true</span>,
+  local: <span class="kw">true</span>
+});
+<span class="kw">await</span> agent.<span class="fn">heal</span>();</code>
+</div>
+</div>
+</div>
+</section>
+
+<section class="mission" id="mission">
+<div class="container">
+<div class="mission-grid">
+<div class="mission-quote">"We don't build tools. We build the infrastructure that makes tools obsolete."</div>
+<div class="mission-body">
+<p>Omni IDE was born from a simple frustration: autonomous AI capabilities exist, but they remain locked behind paywalls, cloud dependencies, and corporate APIs. We set out to change that.</p>
+<p>We are an AI research and engineering company based in Bengaluru — the Silicon Valley of India. Our mission is to build the open infrastructure layer for autonomous software development: tools that write, test, debug, and heal their own code without requiring human supervision.</p>
+<p>Our flagship product, Omni IDE v3.0.0, is the first local-native AI IDE with a self-healing agentic loop. It runs entirely on-device, with zero telemetry, zero watermarks, and zero cloud lock-in. Every line of code stays on your machine.</p>
+<p>We are only getting started.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="ecosystem" id="ecosystem">
+<div class="container">
+<div class="label">THE OMNI ECOSYSTEM</div>
+<h2 class="section-title">A Platform, Not a Product</h2>
+<p class="section-sub">We are building a multi-layer infrastructure for autonomous engineering. Each component is designed to function independently and integrate seamlessly.</p>
+<div class="eco-grid">
+<div class="eco-card">
+<div class="eco-icon"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+<div class="eco-status live">● LIVE — v3.0.0</div>
+<h3>Omni IDE</h3>
+<div class="tagline">The Edge-First, Zero-Latency Developer Workspace</div>
+<p>The flagship product. A full AI-powered IDE rebuilt on the VS Code core with Omni-Agent integration and Google Gemini API. Runs fully local — zero telemetry, zero cloud dependency. Currently Windows; macOS &amp; Linux coming.</p>
+</div>
+<div class="eco-card">
+<div class="eco-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+<div class="eco-status dev">● IN DEVELOPMENT</div>
+<h3>Omni-Guard</h3>
+<div class="tagline">Deterministic AI Sandboxing Middleware</div>
+<p>Our proprietary security layer that keeps autonomous coding agents safely isolated from the host OS. Omni-Guard ensures that AI-written and AI-executed code cannot escape its sandbox — making agentic development trustworthy for enterprise use.</p>
+</div>
+<div class="eco-card">
+<div class="eco-icon"><svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+<div class="eco-status live">● LIVE</div>
+<h3>Self-Healing Terminal</h3>
+<div class="tagline">Autonomous Build-Test-Crash-Fix Loop</div>
+<p>The heart of Omni IDE's agentic core. An asynchronous loop architecture that catches runtime errors, generates targeted patches via Gemini, and re-executes — all without human input. The terminal that fixes itself.</p>
+</div>
+<div class="eco-card">
+<div class="eco-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 2a10 10 0 0 0-10 10"/><path d="M12 22a10 10 0 0 1-10-10"/><path d="M12 22a10 10 0 0 0 10-10"/></svg></div>
+<div class="eco-status live">● LIVE</div>
+<h3>Omni-Agent</h3>
+<div class="tagline">The Agentic Coding Brain</div>
+<p>A hybrid cloud-local AI execution engine pairing Google Gemini for cloud diagnostics with Ollama for fast local inference. Task planning, multi-file editing, and autonomous decision-making for complex software workflows.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="stats" id="stats">
+<div class="stats-overlay" style="background:radial-gradient(circle at 30% 50%,rgba(26,86,219,.2),transparent 60%),radial-gradient(circle at 70% 50%,rgba(0,180,216,.1),transparent 60%)"></div>
+<div class="stats-grid container">
+<div class="stat-tile"><div class="stat-num" id="stat-counter">0</div><div class="stat-label">Developer Workflows &amp; Clones</div></div>
+<div class="stat-tile"><div class="stat-num">v3.0.0</div><div class="stat-label">Stable Release · Windows Native</div></div>
+<div class="stat-tile"><div class="stat-num">100%</div><div class="stat-label">Open Source · Zero Telemetry</div></div>
+<div class="stat-tile"><div class="stat-num">MSME</div><div class="stat-label">Govt. of India Registered</div></div>
+</div>
+</section>
+
+<section class="team" id="team">
+<div class="container">
+<div class="label">THE PEOPLE</div>
+<h2 class="section-title">Building the Future</h2>
+<p class="section-sub">A small, focused team of engineers obsessed with autonomous AI, local inference, and developer-first tools.</p>
+<div class="team-grid">
+<div class="team-card">
+<img src="mohammed_nihan.jpg" alt="Mohammed Nihan" class="team-avatar avatar-nihan">
+<h3>Mohammed Nihan</h3>
+<div class="title">Founder &amp; CEO</div>
+<p class="bio">Mohammed is the visionary architect behind Omni IDE, dedicated to bridging the gap between human intent and autonomous execution. With a background in deterministic AI and edge inference, he leads the development of our self-healing agentic core.</p>
+<a href="https://linkedin.com/company/omni-ide" target="_blank" class="social"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1A56DB" stroke="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+</div>
+<div class="team-card">
+<img src="shaiban_faraz.jpg" alt="Shaiban Faraz Khan" class="team-avatar">
+<h3>Shaiban Faraz Khan</h3>
+<div class="title">Co-Founder &amp; CTO</div>
+<p class="bio">Shaiban leads the technical evolution of the Omni ecosystem, focusing on low-latency orchestration and secure sandboxing. An expert in distributed systems, he ensures our autonomous agents operate with industrial-grade reliability and performance.</p>
+<a href="https://www.linkedin.com/in/shaiban-faraz-khan/" target="_blank" class="social"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1A56DB" stroke="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn Profile</a>
+</div>
+<div class="team-card">
+<img src="mohammed_bilal.jpg" alt="Mohammed Bilal D" class="team-avatar avatar-bilal">
+<h3>Mohammed Bilal D</h3>
+<div class="title">COO &amp; CFO</div>
+<p class="bio">Bilal orchestrates the financial strategy and operational backbone of Omni IDE. With a keen focus on capital efficiency and organizational scaling, he builds the global partnerships and structural frameworks required to accelerate our mission of democratizing autonomous software engineering for everyone.</p>
+<a href="https://www.linkedin.com/in/mohammed-bilal-d/" target="_blank" class="social"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1A56DB" stroke="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn Profile</a>
+</div>
+</div>
+</div>
+</section>
+
+<section class="trust" id="trust">
+<div class="container">
+<div class="label">LEGITIMACY &amp; TRUST</div>
+<h2 class="section-title">Registered. Open. Accountable.</h2>
+<div class="trust-grid" style="margin-top:40px">
+<div>
+<div class="trust-row"><span class="tl">Registered As</span><span class="tv">MSME — UDYAM-KR-03-0681404</span></div>
+<div class="trust-row"><span class="tl">Headquarters</span><span class="tv">Bengaluru, Karnataka — Silicon Valley of India</span></div>
+<div class="trust-row"><span class="tl">Open Source</span><span class="tv">All core tooling on GitHub under open-source licenses</span></div>
+<div class="trust-row"><span class="tl">Privacy Policy</span><span class="tv">Zero telemetry · Zero data collection · BYOK model</span></div>
+<div class="trust-row"><span class="tl">Partnerships</span><span class="tv">VTU &amp; AICTE internship networks (active)</span></div>
+<div class="trust-row"><span class="tl">Corporate Email</span><span class="tv">contact@nihu.in</span></div>
+<div class="trust-row"><span class="tl">GitHub Org</span><span class="tv"><a href="https://github.com/nihannihu" target="_blank">github.com/nihannihu</a></span></div>
+<div class="trust-row"><span class="tl">LinkedIn</span><span class="tv"><a href="https://linkedin.com/company/omni-ide" target="_blank">linkedin.com/company/omni-ide</a></span></div>
+</div>
+<div class="msme-badge">
+<img id="msme-qr" src="" alt="MSME QR Code">
+<h4>MSME Verified</h4>
+<div class="code">UDYAM-KR-03-0681404</div>
+<div class="verified-pill"><span class="dot"></span>GOVT. OF INDIA VERIFIED</div>
+<p class="hint">Scan QR code to verify company status on the Udyam portal</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="careers" id="careers">
+<div class="container">
+<div class="label">JOIN US</div>
+<h2 class="section-title">Build the Future of AI With Us</h2>
+<div class="careers-grid" style="margin-top:40px">
+<div class="careers-copy">We are a lean, aggressive engineering team. We move fast, ship real things, and care deeply about open-source. If you obsess over LLM orchestration, Docker sandboxing, and edge AI inference — there is a seat at this table. We work with students from VTU, AICTE, and top engineering colleges across Karnataka.</div>
+<div>
+<div class="role-card"><div><div class="role-title">AI Engineering Intern</div><div class="role-tags"><span class="tag tag-open">OPEN</span><span class="tag tag-type">Internship</span><span class="tag tag-loc">Remote/Bengaluru</span></div></div><a href="mailto:careers@nihu.in" class="btn-apply">Apply Now</a></div>
+<div class="role-card"><div><div class="role-title">Full-Stack Engineering Intern</div><div class="role-tags"><span class="tag tag-open">OPEN</span><span class="tag tag-type">Internship</span><span class="tag tag-loc">Remote</span></div></div><a href="mailto:careers@nihu.in" class="btn-apply">Apply Now</a></div>
+<div class="role-card"><div><div class="role-title">Systems / DevOps Intern</div><div class="role-tags"><span class="tag tag-open">OPEN</span><span class="tag tag-type">Internship</span><span class="tag tag-loc">Bengaluru</span></div></div><a href="mailto:careers@nihu.in" class="btn-apply">Apply Now</a></div>
+<div class="role-card"><div><div class="role-title">Head of AI Infrastructure</div><div class="role-tags"><span class="tag tag-upcoming">UPCOMING</span><span class="tag tag-type">Full-Time</span><span class="tag tag-loc">Bengaluru</span></div></div><button class="btn-apply disabled">Upcoming</button></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="contact" id="contact">
+<div class="container">
+<h2 class="contact-title">Let's Build<span class="blue"> Together.</span></h2>
+<div class="contact-grid">
+<div>
+<a href="mailto:contact@nihu.in" class="contact-link"><div class="ci"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg></div><div><div class="cl">Email Us</div><div class="cv">contact@nihu.in</div></div></a>
+<a href="https://github.com/nihannihu" target="_blank" class="contact-link"><div class="ci"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></div><div><div class="cl">GitHub Org</div><div class="cv">github.com/nihannihu</div></div></a>
+<a href="https://linkedin.com/company/omni-ide" target="_blank" class="contact-link"><div class="ci"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div><div><div class="cl">LinkedIn</div><div class="cv">linkedin.com/company/omni-ide</div></div></a>
+<div class="contact-link"><div class="ci"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="cl">Headquarters</div><div class="cv">Bengaluru, Karnataka, India</div></div></div>
+</div>
+<div class="contact-form" id="contact-form">
+<form id="cform">
+<div class="form-row"><div class="form-group"><label>Name</label><input type="text" placeholder="Your name" required></div><div class="form-group"><label>Email</label><input type="email" placeholder="you@company.com" required></div></div>
+<div class="form-group"><label>Subject</label><select required><option value="">Select a topic</option><option>Press Inquiry</option><option>Partnership</option><option>Investor Inquiry</option><option>Careers</option><option>Other</option></select></div>
+<div class="form-group"><label>Message</label><textarea placeholder="Tell us about your inquiry..." required></textarea></div>
+<button type="submit" class="btn-submit">Send Message →</button>
+</form>
+<div class="form-success" id="form-success"><div class="check">✓</div><p style="font-weight:600;font-size:17px">Message sent!</p><p style="color:#6B7280;font-size:14px">We'll be in touch shortly.</p></div>
+</div>
+</div>
+</div>
+</section>
+
+<footer class="footer">
+<div class="container">
+<div class="footer-grid">
+<div class="footer-brand">
+<div class="f-logo logo">
+<img src="logo.jpg" alt="Omni IDE">
+<span>Omni IDE</span>
+</div>
+<p>Building the open infrastructure layer for autonomous software development.</p>
+<div class="reg">UDYAM-KR-03-0681404</div>
+</div>
+<div class="footer-col"><h5>Company</h5><a href="#mission">About</a><a href="#mission">Mission</a><a href="#team">Team</a><a href="#">Blog</a><a href="#">Press Kit</a></div>
+<div class="footer-col"><h5>Products</h5><a href="#ecosystem">Omni IDE</a><a href="#ecosystem">Omni-Guard</a><a href="#">Roadmap</a><a href="https://github.com/nihannihu/Omni-IDE" target="_blank">GitHub Releases</a></div>
+<div class="footer-col"><h5>Connect</h5><a href="https://github.com/nihannihu" target="_blank">GitHub</a><a href="https://linkedin.com/company/omni-ide" target="_blank">LinkedIn</a><a href="mailto:contact@nihu.in">Email</a><a href="#">Twitter/X</a></div>
+</div>
+<div class="footer-bottom">
+<span>© 2026 Omni IDE. UDYAM-KR-03-0681404. All rights reserved.</span>
+<div><a href="#">Privacy Policy</a><a href="#">Terms of Use</a><a href="#">Made with ❤️ in Bengaluru 🇮🇳</a></div>
+</div>
+</div>
+</footer>
+
+<script>
+// PRELOADER & BURST ENTRANCE
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    const loaderLogo = preloader.querySelector('.loader-logo');
+    
+    // Trigger burst almost immediately
+    setTimeout(() => {
+        loaderLogo.classList.add('preloader-burst');
+        preloader.style.transition = 'background 0.4s ease';
+        preloader.style.background = 'transparent';
+        
+        setTimeout(() => {
+            preloader.classList.add('fade-out');
+            document.body.style.cursor = 'none';
+        }, 300);
+
+        gsap.from(".hero-content > *", { duration: 0.6, y: 40, opacity: 0, stagger: 0.08, ease: "power2.out" });
+        gsap.from(".hero-visual", { duration: 1, scale: 0.95, opacity: 0, ease: "power2.out", delay: 0.2 });
+    }, 100); 
+});
+
+// 1. CUSTOM CURSOR
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursor-ring');
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+    
+    // 2. PARALLAX EFFECT FOR BACKGROUND
+    if(particlesMesh) {
+        const x = (e.clientX / window.innerWidth - 0.5) * 5;
+        const y = (e.clientY / window.innerHeight - 0.5) * 5;
+        gsap.to(particlesMesh.rotation, { y: x * 0.1, x: y * 0.1, duration: 2 });
+    }
+});
+
+function animateCursor() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    cursorRing.style.left = (ringX - 18) + 'px';
+    cursorRing.style.top = (ringY - 18) + 'px';
+    requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+        cursor.style.width = '20px';
+        cursor.style.height = '20px';
+        cursorRing.style.width = '50px';
+        cursorRing.style.height = '50px';
+    });
+    el.addEventListener('mouseleave', () => {
+        cursor.style.width = '12px';
+        cursor.style.height = '12px';
+        cursorRing.style.width = '36px';
+        cursorRing.style.height = '36px';
+    });
+});
+
+// 2. THREE.JS BACKGROUND
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const particlesGeometry = new THREE.BufferGeometry();
+const posArray = new Float32Array(800 * 3);
+for(let i=0; i<800*3; i++) posArray[i] = (Math.random() - 0.5) * 300;
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+const particlesMaterial = new THREE.PointsMaterial({ size: 0.8, color: 0x1A56DB, opacity: 0.3, transparent: true });
+const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particlesMesh);
+
+const wireMat = new THREE.MeshBasicMaterial({ color: 0x1A56DB, wireframe: true, opacity: 0.12, transparent: true });
+const ico = new THREE.Mesh(new THREE.IcosahedronGeometry(8, 0), wireMat);
+const oct = new THREE.Mesh(new THREE.OctahedronGeometry(6, 0), wireMat);
+const tor = new THREE.Mesh(new THREE.TorusGeometry(12, 3, 8, 20), wireMat);
+ico.position.set(-30, 10, 0);
+oct.position.set(30, -10, -10);
+tor.position.set(10, 20, -20);
+scene.add(ico, oct, tor);
+
+camera.position.z = 80;
+
+function animateBG() {
+    requestAnimationFrame(animateBG);
+    particlesMesh.rotation.y += 0.0003;
+    particlesMesh.rotation.x += 0.0001;
+    ico.rotation.x += 0.003; ico.rotation.y += 0.003;
+    oct.rotation.y += 0.005;
+    tor.rotation.x += 0.002; tor.rotation.z += 0.002;
+    renderer.render(scene, camera);
+}
+animateBG();
+
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// 3. NAVBAR SCROLL & BACK TO TOP
+const nav = document.getElementById('navbar');
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+    if(window.scrollY > 80) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+    
+    if(window.scrollY > 600) btt.classList.add('show');
+    else btt.classList.remove('show');
+    
+    // 10. SCROLL PROGRESS BAR
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    const sp = document.getElementById("scroll-progress");
+    if(sp) sp.style.width = scrolled + "%";
+});
+
+btt.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// 4. SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if(target) {
+            window.scrollTo({
+                top: target.offsetTop - 80,
+                behavior: 'smooth'
+            });
+            // 8. MOBILE MENU CLOSE
+            nav.classList.remove('menu-open');
+        }
+    });
+});
+
+// 5. GSAP ANIMATIONS
+gsap.registerPlugin(ScrollTrigger);
+
+const tl = gsap.timeline({defaults: {ease: "power3.out", duration: 0.9}});
+tl.from(".hero-eyebrow", {opacity: 0, y: 30, delay: 0.2})
+  .from(".h-line", {opacity: 0, y: 40, stagger: 0.15}, "-=0.6")
+  .from(".hero-sub", {opacity: 0, y: 20}, "-=0.7")
+  .from(".hero-ctas", {opacity: 0, y: 20, stagger: 0.1}, "-=0.8")
+  .from(".trust-strip", {opacity: 0, y: 15}, "-=0.8")
+  .from(".hero-visual", {opacity: 0, x: 60, duration: 1.2}, "-=1.2");
+
+gsap.utils.toArray('section').forEach(section => {
+    if(section.id === 'hero') return;
+    gsap.from(section.querySelectorAll('.container > *'), {
+        scrollTrigger: {
+            trigger: section,
+            start: "top 80%",
+        },
+        opacity: 0,
+        y: 40,
+        stagger: 0.12,
+        duration: 0.8,
+        ease: "power2.out"
+    });
+});
+
+// 6. STATS COUNTER
+const counterEl = document.getElementById('stat-counter');
+const observer = new IntersectionObserver((entries) => {
+    if(entries[0].isIntersecting) {
+        animateValue(counterEl, 0, 15795, 2000);
+        observer.unobserve(entries[0].target);
+    }
+}, { threshold: 0.5 });
+observer.observe(document.getElementById('stats'));
+
+function animateValue(obj, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const value = Math.floor(easeOut * (end - start) + start);
+        obj.innerHTML = value.toLocaleString() + "+";
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
+}
+
+// 7. 3D CARD TILT
+document.querySelectorAll('.eco-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -8;
+        const rotateY = ((x - centerX) / centerX) * 8;
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = `perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
+    });
+});
+
+// 8. MOBILE MENU
+document.getElementById('hamburger').addEventListener('click', () => {
+    nav.classList.toggle('menu-open');
+});
+
+// 9. FORM SUBMIT
+document.getElementById('cform').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.innerHTML = 'Sending...';
+    btn.style.opacity = '0.7';
+    btn.disabled = true;
+    
+    setTimeout(() => {
+        document.getElementById('cform').style.display = 'none';
+        document.getElementById('form-success').classList.add('show');
+    }, 1200);
+});
+
+// MSME QR Placeholder
+document.getElementById('msme-qr').src = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://udyamregistration.gov.in";
+
+</script>
+</body>
+</html>
